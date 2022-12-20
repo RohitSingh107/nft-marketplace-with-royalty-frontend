@@ -22,12 +22,19 @@ const SellNft: NextPage = () => {
   // const marketplaceAddress = (networkMapping as NetworkConfigMap)[chainString].NftMarketplace[0]
   const marketplaceAddress = "0xCCDF1f9bAeb64d31391E503D27C014d0707a4eA6"
   const [proceeds, setProceeds] = useState("0")
+  const [royalties, setRoyalties] = useState("0")
 
   const dispatch = useNotification()
 
   // @ts-ignore
   const { runContractFunction } = useWeb3Contract()
 
+  const royaltyOptions = {
+    abi: nftMarketplaceAbi,
+    contractAddress: marketplaceAddress,
+    functionName: "withdrawRoyalties",
+    params: {},
+  }
   const withDrawOptions = {
     abi: nftMarketplaceAbi,
     contractAddress: marketplaceAddress,
@@ -36,6 +43,19 @@ const SellNft: NextPage = () => {
   }
 
   async function setupUI() {
+    const returnedRoyalties = await runContractFunction({
+      params: {
+        abi: nftMarketplaceAbi,
+        contractAddress: marketplaceAddress,
+        functionName: "getRoyalties",
+        params: {
+          seller: account,
+        },
+      },
+      onSuccess: () => console.log("Setup Successfull!"),
+
+      onError: (error) => console.log(error),
+    })
     const returnedProceeds = await runContractFunction({
       params: {
         abi: nftMarketplaceAbi,
@@ -45,18 +65,21 @@ const SellNft: NextPage = () => {
           seller: account,
         },
       },
-      onSuccess: () => console.log("Setup Successfull!"),
+      onSuccess: () => console.log("Setup Successfull! 2"),
 
       onError: (error) => console.log(error),
     })
     if (returnedProceeds) {
       setProceeds(returnedProceeds.toString())
     }
+    if (returnedRoyalties) {
+      setRoyalties(returnedRoyalties.toString())
+    }
   }
 
   useEffect(() => {
     setupUI()
-  }, [proceeds, account, isWeb3Enabled, chainId])
+  }, [royalties, proceeds, account, isWeb3Enabled, chainId])
 
   const handleWithdrawSuccess = () => {
     dispatch({
@@ -67,6 +90,14 @@ const SellNft: NextPage = () => {
     })
   }
 
+  const handleRoyaltyClaimSuccess = () => {
+    dispatch({
+      type: "success",
+      message: "Royalty claimed successfully",
+      title: "Royalty claimed",
+      position: "topR",
+    })
+  }
   async function handleApproveSuccess(
     nftAddress: string,
     tokenId: string,
@@ -184,6 +215,31 @@ const SellNft: NextPage = () => {
             />
           ) : (
             <p>No withdrawable proceeds detected</p>
+          )}
+        </div>
+      </div>
+      <div className="py-4">
+        <div className="flex flex-col gap-2 justify-items-start w-fit">
+          <h2 className="text-2xl">
+            Royalty Earned{" "}
+            {ethers.utils.formatUnits(royalties.toString(), "ether")}{" "}
+          </h2>
+          {royalties != "0" ? (
+            <Button
+              id="royalty-earned"
+              onClick={() =>
+                runContractFunction({
+                  params: royaltyOptions,
+                  onSuccess: () => handleRoyaltyClaimSuccess,
+                  onError: (error) => console.log(error),
+                })
+              }
+              text="Claim Royalty"
+              theme="primary"
+              type="button"
+            />
+          ) : (
+            <p>No royalty earned</p>
           )}
         </div>
       </div>
