@@ -1,0 +1,50 @@
+{
+  "name": "marketplace-nft-with-royalty-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "moralis:sync": "moralis-admin-cli connect-local-devchain --chain hardhat --moralisSubdomain mnks13pc9scu.usemoralis.com --frpcPath ./frp/frpc",
+    "moralis:cloud": "moralis-admin-cli watch-cloud-folder  --moralisSubdomain mnks13pc9scu.usemoralis.com --autoSave 1 --moralisCloudfolder ./cloudFunctions",
+    "moralis:logs": "moralis-admin-cli get-logs --moralisSubdomain mnks13pc9scu.usemoralis.com",
+    "moralis:watch": "node watchEvents.js"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.5.10",
+    "@types/mime": "^3.0.1",
+    "@web3auth/web3auth": "^2.1.3",
+    "@web3uikit/web3": "^0.1.9",
+    "axios": "^0.26.1",
+    "cors": "^2.8.5",
+    "ethers": "^5.6.0",
+    "graphql": "^16.3.0",
+    "js-ipfs-fetch": "^3.5.0",
+    "magic-sdk": "^10.0.0",
+    "mime": "^3.0.0",
+    "moralis": "^1.3.5",
+    "moralis-v1": "^1.11.0",
+    "next": "12.1.0",
+    "nft.storage": "^7.0.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-moralis": "^1.3.2",
+    "web3uikit": "^0.1.76"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.21",
+    "@types/react": "17.0.40",
+    "autoprefixer": "^10.4.12",
+    "dotenv": "^16.0.0",
+    "eslint": "8.11.0",
+    "eslint-config-next": "12.1.0",
+    "fs": "^0.0.1-security",
+    "postcss": "^8.4.17",
+    "postcss-preset-env": "^7.4.2",
+    "prettier": "^2.7.1",
+    "tailwindcss": "^3.1.8",
+    "typescript": "4.6.2"
+  }
+}
