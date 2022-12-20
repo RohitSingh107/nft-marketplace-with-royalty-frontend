@@ -49,10 +49,10 @@ const SellNft: NextPage = () => {
         contractAddress: marketplaceAddress,
         functionName: "getRoyalties",
         params: {
-          seller: account,
+          royaltiesReceiver: account,
         },
       },
-      onSuccess: () => console.log("Setup Successfull!"),
+      onSuccess: () => console.log("Setup Successfull! 1"),
 
       onError: (error) => console.log(error),
     })
@@ -160,87 +160,89 @@ const SellNft: NextPage = () => {
   }
 
   return (
-    <div>
-      <Form
-        onSubmit={approveAndList}
-        buttonConfig={{
-          isLoading: false,
-          type: "submit",
-          theme: "primary",
-          text: "Sell NFT!",
-        }}
-        data={[
-          {
-            inputWidth: "50%",
-            name: "NFT Address",
-            type: "text",
-            value: "",
-            key: "nftAddress",
-          },
-          {
-            name: "NFT Token Id",
-            type: "number",
-            value: "",
-            key: "tokenId",
-          },
-          {
-            name: "Price (in ETH)",
-            type: "number",
-            value: "",
-            key: "price",
-          },
-        ]}
-        title="Sell your NFT!"
-        id="Main Form"
-      />
-      <div className="py-4">
-        <div className="flex flex-col gap-2 justify-items-start w-fit">
-          <h2 className="text-2xl">
-            Withdraw {ethers.utils.formatUnits(proceeds.toString(), "ether")}{" "}
-            proceeds
-          </h2>
-          {proceeds != "0" ? (
-            <Button
-              id="withdraw-proceeds"
-              onClick={() =>
-                runContractFunction({
-                  params: withDrawOptions,
-                  onSuccess: () => handleWithdrawSuccess,
-                  onError: (error) => console.log(error),
-                })
-              }
-              text="Withdraw"
-              theme="primary"
-              type="button"
-            />
-          ) : (
-            <p>No withdrawable proceeds detected</p>
-          )}
+    <div className="grid h-screen place-items-center">
+      <div>
+        <Form
+          onSubmit={approveAndList}
+          buttonConfig={{
+            isLoading: false,
+            type: "submit",
+            theme: "primary",
+            text: "Sell NFT!",
+          }}
+          data={[
+            {
+              inputWidth: "50%",
+              name: "NFT Address",
+              type: "text",
+              value: "",
+              key: "nftAddress",
+            },
+            {
+              name: "NFT Token Id",
+              type: "number",
+              value: "",
+              key: "tokenId",
+            },
+            {
+              name: "Price (in ETH)",
+              type: "number",
+              value: "",
+              key: "price",
+            },
+          ]}
+          title="Sell your NFT!"
+          id="Main Form"
+        />
+        <div className="py-4">
+          <div className="flex flex-col gap-2 justify-items-start w-fit">
+            <h2 className="text-2xl">
+              Withdraw {ethers.utils.formatUnits(proceeds.toString(), "ether")}{" "}
+              proceeds
+            </h2>
+            {proceeds != "0" ? (
+              <Button
+                id="withdraw-proceeds"
+                onClick={() =>
+                  runContractFunction({
+                    params: withDrawOptions,
+                    onSuccess: () => handleWithdrawSuccess,
+                    onError: (error) => console.log(error),
+                  })
+                }
+                text="Withdraw"
+                theme="primary"
+                type="button"
+              />
+            ) : (
+              <p>No withdrawable proceeds detected</p>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="py-4">
-        <div className="flex flex-col gap-2 justify-items-start w-fit">
-          <h2 className="text-2xl">
-            Royalty Earned{" "}
-            {ethers.utils.formatUnits(royalties.toString(), "ether")}{" "}
-          </h2>
-          {royalties != "0" ? (
-            <Button
-              id="royalty-earned"
-              onClick={() =>
-                runContractFunction({
-                  params: royaltyOptions,
-                  onSuccess: () => handleRoyaltyClaimSuccess,
-                  onError: (error) => console.log(error),
-                })
-              }
-              text="Claim Royalty"
-              theme="primary"
-              type="button"
-            />
-          ) : (
-            <p>No royalty earned</p>
-          )}
+        <div className="py-4">
+          <div className="flex flex-col gap-2 justify-items-start w-fit">
+            <h2 className="text-2xl">
+              Royalty Earned{" "}
+              {ethers.utils.formatUnits(royalties.toString(), "ether")}{" "}
+            </h2>
+            {royalties != "0" ? (
+              <Button
+                id="royalty-earned"
+                onClick={() =>
+                  runContractFunction({
+                    params: royaltyOptions,
+                    onSuccess: () => handleRoyaltyClaimSuccess,
+                    onError: (error) => console.log(error),
+                  })
+                }
+                text="Claim Royalty"
+                theme="primary"
+                type="button"
+              />
+            ) : (
+              <p>No royalty earned</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

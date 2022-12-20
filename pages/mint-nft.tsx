@@ -278,7 +278,7 @@ const SellNft: NextPage = () => {
     <div className="grid h-screen place-items-center">
       <div>
         <div>
-          <h1>Upload Your Product Image</h1>
+          <h1>Upload Your NFT Image</h1>
 
           <Upload onChange={fileChange} theme="withIcon" />
         </div>
@@ -289,13 +289,13 @@ const SellNft: NextPage = () => {
             buttonConfig={{
               isLoading: false,
               type: "submit",
-              theme: "ghost",
-              text: "List NFT!",
+              theme: "primary",
+              text: "Mint NFT!",
             }}
             data={[
               {
-                name: "Product Serial Number",
-                type: "number",
+                name: "NFT Receiver",
+                type: "text",
                 validation: {
                   required: true,
                 },
@@ -303,7 +303,7 @@ const SellNft: NextPage = () => {
                 key: "tokenId",
               },
               {
-                name: "Name of the product",
+                name: "Royalty Receiver",
                 type: "text",
                 validation: {
                   required: true,
@@ -312,7 +312,7 @@ const SellNft: NextPage = () => {
                 key: "productName",
               },
               {
-                name: "Description of your product",
+                name: "Description of your NFT",
                 type: "textarea",
                 value: "",
                 key: "description",
@@ -327,35 +327,9 @@ const SellNft: NextPage = () => {
                 key: "price",
               },
             ]}
-            title="Details of the product"
+            title="Details of the NFT"
             id="Main Form"
           />
-        </div>
-
-        <div className="py-4">
-          <div className="flex flex-col gap-2 justify-items-start w-fit">
-            <h2 className="text-2xl">
-              Withdraw {ethers.utils.formatUnits(proceeds.toString(), "ether")}{" "}
-              proceeds
-            </h2>
-            {proceeds != "0" ? (
-              <Button
-                id="withdraw-proceeds"
-                onClick={() =>
-                  runContractFunction({
-                    params: withDrawOptions,
-                    onSuccess: () => handleWithdrawSuccess,
-                    onError: (error) => console.log(error),
-                  })
-                }
-                text="Withdraw"
-                theme="primary"
-                type="button"
-              />
-            ) : (
-              <p>No withdrawable proceeds detected</p>
-            )}
-          </div>
         </div>
       </div>
     </div>

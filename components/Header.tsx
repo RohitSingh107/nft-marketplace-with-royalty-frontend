@@ -16,9 +16,9 @@ export default function Header() {
           {/* Home is going to be the recent listings page */}
           <a className="mr-4 p-6">Home</a>
         </Link>
-        <Link href="/sell-page">
+        <Link href="/mint-nft">
           {/* This is going to include cancel listings, update listings, and withdraw proceeds */}
-          <a className="mr-4 p-6">List Item</a>
+          <a className="mr-4 p-6">Mint NFT</a>
         </Link>
         <Link href="/sell-nft">
           {/* This is going to include cancel listings, update listings, and withdraw proceeds */}
