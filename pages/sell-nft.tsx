@@ -197,8 +197,8 @@ const SellNft: NextPage = () => {
         <div className="py-4">
           <div className="flex flex-col gap-2 justify-items-start w-fit">
             <h2 className="text-2xl">
-              Withdraw {ethers.utils.formatUnits(proceeds.toString(), "ether")}{" "}
-              proceeds
+              Sales revenue{" "}
+              {ethers.utils.formatUnits(proceeds.toString(), "ether")} Matic
             </h2>
             {proceeds != "0" ? (
               <Button
@@ -223,7 +223,7 @@ const SellNft: NextPage = () => {
           <div className="flex flex-col gap-2 justify-items-start w-fit">
             <h2 className="text-2xl">
               Royalty Earned{" "}
-              {ethers.utils.formatUnits(royalties.toString(), "ether")}{" "}
+              {ethers.utils.formatUnits(royalties.toString(), "ether")} Matic
             </h2>
             {royalties != "0" ? (
               <Button
