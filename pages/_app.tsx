@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Xchainge Protocol</title>
+        <title>NFT Marketplace</title>
         <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
       <MoralisProvider initializeOnMount={false}>
@@ -33,4 +33,3 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 export default MyApp
-

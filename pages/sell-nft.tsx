@@ -8,7 +8,8 @@ import { useEffect, useState } from "react"
 import { BigNumber, ethers } from "ethers"
 
 type NetworkConfigItem = {
-  NftMarketplace: string[]
+  Marketplace: string[]
+  NFT: string[]
 }
 
 type NetworkConfigMap = {
@@ -20,7 +21,9 @@ const SellNft: NextPage = () => {
   const chainString = chainId ? parseInt(chainId).toString() : "80001"
   // Should point to correct address
   // const marketplaceAddress = (networkMapping as NetworkConfigMap)[chainString].NftMarketplace[0]
-  const marketplaceAddress = "0xCCDF1f9bAeb64d31391E503D27C014d0707a4eA6"
+  // const marketplaceAddress = "0xCCDF1f9bAeb64d31391E503D27C014d0707a4eA6"
+  const marketplaceAddress = (networkMapping as NetworkConfigMap)[chainString]
+    .Marketplace[0]
   const [proceeds, setProceeds] = useState("0")
   const [royalties, setRoyalties] = useState("0")
 
@@ -43,7 +46,7 @@ const SellNft: NextPage = () => {
   }
 
   async function setupUI() {
-    const returnedRoyalties = await runContractFunction({
+    const returnedRoyalties: any = await runContractFunction({
       params: {
         abi: nftMarketplaceAbi,
         contractAddress: marketplaceAddress,
@@ -56,7 +59,7 @@ const SellNft: NextPage = () => {
 
       onError: (error) => console.log(error),
     })
-    const returnedProceeds = await runContractFunction({
+    const returnedProceeds: any = await runContractFunction({
       params: {
         abi: nftMarketplaceAbi,
         contractAddress: marketplaceAddress,
@@ -198,7 +201,7 @@ const SellNft: NextPage = () => {
           <div className="flex flex-col gap-2 justify-items-start w-fit">
             <h2 className="text-2xl">
               Sales revenue{" "}
-              {ethers.utils.formatUnits(proceeds.toString(), "ether")} Matic
+              {ethers.utils.formatUnits(proceeds.toString(), "ether")} Eth
             </h2>
             {proceeds != "0" ? (
               <Button
@@ -223,7 +226,7 @@ const SellNft: NextPage = () => {
           <div className="flex flex-col gap-2 justify-items-start w-fit">
             <h2 className="text-2xl">
               Royalty Earned{" "}
-              {ethers.utils.formatUnits(royalties.toString(), "ether")} Matic
+              {ethers.utils.formatUnits(royalties.toString(), "ether")} Eth
             </h2>
             {royalties != "0" ? (
               <Button

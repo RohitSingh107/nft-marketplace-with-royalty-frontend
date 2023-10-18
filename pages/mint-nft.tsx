@@ -11,10 +11,15 @@ import { BigNumber, ethers } from "ethers"
 
 type NetworkConfigItem = {
   Marketplace: string[]
+  NFT: string[]
 }
 
 type NetworkConfigMap = {
   [chainId: string]: NetworkConfigItem
+}
+
+async function delay(seconds: number) {
+  await new Promise<void>((resolve) => setTimeout(resolve, seconds * 1000))
 }
 
 const SellNft: NextPage = () => {
@@ -27,7 +32,8 @@ const SellNft: NextPage = () => {
   // Should point to correct address
   const marketplaceAddress = (networkMapping as NetworkConfigMap)[chainString]
     .Marketplace[0]
-  const aanftAddress = "0xd47E8387177F2b07E52d86EFa8cdb52F84C1A62E"
+  const aanftAddress = (networkMapping as NetworkConfigMap)[chainString].NFT[0]
+  // const aanftAddress = "0xd47E8387177F2b07E52d86EFa8cdb52F84C1A62E"
   const [proceeds, setProceeds] = useState("0")
 
   const dispatch = useNotification()
@@ -58,6 +64,8 @@ const SellNft: NextPage = () => {
       onError: (error) => console.log(error),
     })
     if (returnedProceeds) {
+      console.log("returnedProceeds is, ", returnedProceeds)
+      // @ts-ignore
       setProceeds(returnedProceeds.toString())
     }
   }
@@ -179,7 +187,7 @@ const SellNft: NextPage = () => {
     console.log("NFT minted Successfull!")
     console.log("Approving...")
 
-    let r = await runContractFunction({
+    await runContractFunction({
       params: {
         abi: nftAbi,
         contractAddress: nftAddress,
@@ -191,6 +199,7 @@ const SellNft: NextPage = () => {
           marketplaceAddress,
           price,
           nftAbi,
+          // @ts-ignore
           n!.toString()
         ),
       onError: (error) => {
@@ -207,12 +216,14 @@ const SellNft: NextPage = () => {
     nftAbi: any,
     supplyCount: string
   ) {
-    console.log(`supply count is {supplyCount}`)
+    console.log(`supply count is ${supplyCount}`)
     let tokenId = (+supplyCount + 1).toString()
     console.log(
       `nft address is ${nftAddress}, marketplaceAddress is ${marketplaceAddress}, tokenId is ${tokenId}`
     )
-    console.log(nftAbi)
+    // console.log(nftAbi)
+
+    await delay(15)
 
     await runContractFunction({
       params: {
@@ -243,6 +254,9 @@ const SellNft: NextPage = () => {
     console.log("Approved!")
     console.log("Ok... Now listing the item...")
 
+    console.log("marketplace addres is: ", nftAddress)
+
+    await delay(15)
     await runContractFunction({
       params: {
         abi: marketplaceAbi,
@@ -254,7 +268,7 @@ const SellNft: NextPage = () => {
           price: price,
         },
       },
-      onSuccess: () => handleListSuccess(),
+      onSuccess: () => handleListSuccess(tokenId),
       onError: (error) => {
         console.log("Item not Listed")
         console.log(
@@ -265,11 +279,11 @@ const SellNft: NextPage = () => {
     })
   }
 
-  async function handleListSuccess() {
+  async function handleListSuccess(tokenId: string) {
     console.log("Successfully listed!")
     dispatch({
       type: "success",
-      message: "NFT Listed successfully",
+      message: `NFT with id ${tokenId} Listed successfully`,
       title: "NFT Listed",
       position: "topR",
     })
@@ -318,7 +332,7 @@ const SellNft: NextPage = () => {
                 key: "description",
               },
               {
-                name: "Price (in MATIC)",
+                name: "Price (in ETH)",
                 type: "number",
                 validation: {
                   required: true,

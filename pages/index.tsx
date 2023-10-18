@@ -26,6 +26,7 @@ const Home: NextPage = () => {
   // TODO: Implement paging in UI
   // const [page, setPage] = useState(1)
   const { chainId } = useMoralis()
+  // console.log("chainid", chainId)
   const addresses: contractAddressesInterface = networkConfig
   const marketplaceAddress = chainId
     ? addresses[parseInt(chainId!).toString()]["Marketplace"][0]
@@ -37,8 +38,8 @@ const Home: NextPage = () => {
     data: listedNfts,
   } = useQuery(GET_ACTIVE_ITEMS)
 
-  console.log(subgraphQueryError)
-  console.log(marketplaceAddress)
+  // console.log("here1", subgraphQueryError)
+  // console.log(marketplaceAddress)
 
   return (
     <div className="container mx-auto">

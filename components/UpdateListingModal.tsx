@@ -119,7 +119,7 @@ export const UpdateListingModal = ({
               <Illustration height="180px" logo="lazyNft" width="100%" />
             )}
             <div className="font-bold">
-              {ethers.utils.formatEther(currentPrice!.toString()) || 0} MATIC
+              {ethers.utils.formatEther(currentPrice!.toString()) || 0} ETH
             </div>
           </div>
           <Input
@@ -148,4 +148,3 @@ export const UpdateListingModal = ({
     </Modal>
   )
 }
-

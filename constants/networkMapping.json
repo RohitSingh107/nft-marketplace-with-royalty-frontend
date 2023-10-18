@@ -1,6 +1,10 @@
 {
   "80001": {
-    "Marketplace": ["0xCCDF1f9bAeb64d31391E503D27C014d0707a4eA6"]
+    "Marketplace": ["0x4f6b10f65D1faBEc3A65bce8fA2Cf22febd66Fa6"],
+    "NFT": ["0xeade30d474Ff8Cac6bfb485A0462998d8A2ef208"]
+  },
+  "11155111": {
+    "Marketplace": ["0x2f19C27DE68b162989B1cA9A742CE493607C17C4"],
+    "NFT": ["0x9AdfE84506F2dC4688D540A29Cbdeed1237f6De6"]
   }
 }
-
