@@ -121,7 +121,10 @@ const SellNft: NextPage = () => {
 
     await runContractFunction({
       params: options,
-      onSuccess: () => handleListSuccess(),
+      onSuccess: async (tx: any) => {
+        await tx.wait(1)
+        handleListSuccess()
+      },
       onError: (error) => console.log(error),
     })
   }
@@ -155,7 +158,10 @@ const SellNft: NextPage = () => {
 
     await runContractFunction({
       params: options,
-      onSuccess: () => handleApproveSuccess(nftAddress, tokenId, price),
+      onSuccess: async (tx: any) => {
+        await tx.wait(1)
+        handleApproveSuccess(nftAddress, tokenId, price)
+      },
       onError: (error) => {
         console.log(error)
       },
@@ -209,7 +215,10 @@ const SellNft: NextPage = () => {
                 onClick={() =>
                   runContractFunction({
                     params: withDrawOptions,
-                    onSuccess: () => handleWithdrawSuccess,
+                    onSuccess: async (tx: any) => {
+                      await tx.wait(1)
+                      handleWithdrawSuccess
+                    },
                     onError: (error) => console.log(error),
                   })
                 }
@@ -234,7 +243,10 @@ const SellNft: NextPage = () => {
                 onClick={() =>
                   runContractFunction({
                     params: royaltyOptions,
-                    onSuccess: () => handleRoyaltyClaimSuccess,
+                    onSuccess: async (tx: any) => {
+                      await tx.wait(1)
+                      handleRoyaltyClaimSuccess
+                    },
                     onError: (error) => console.log(error),
                   })
                 }

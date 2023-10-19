@@ -18,11 +18,11 @@ type NetworkConfigMap = {
   [chainId: string]: NetworkConfigItem
 }
 
-async function delay(seconds: number) {
-  await new Promise<void>((resolve) => setTimeout(resolve, seconds * 1000))
-}
+// async function delay(seconds: number) {
+//   await new Promise<void>((resolve) => setTimeout(resolve, seconds * 1000))
+// }
 
-const SellNft: NextPage = () => {
+const MintNft: NextPage = () => {
   var fileUploaded = false
   var uploadedfile: Blob
 
@@ -83,31 +83,6 @@ const SellNft: NextPage = () => {
     })
   }
 
-  // async function approveAndList(
-  //   nftAddress: string,
-  //   tokenId: string,
-  //   price: string
-  // ) {
-  //   console.log("Approving...")
-  //   const options = {
-  //     abi: aanftAbi,
-  //     contractAddress: nftAddress,
-  //     functionName: "approve",
-  //     params: {
-  //       to: marketplaceAddress,
-  //       tokenId: tokenId,
-  //     },
-  //   }
-
-  //   await runContractFunction({
-  //     params: options,
-  //     onSuccess: () => handleApproveSuccess(nftAddress, tokenId, price),
-  //     onError: (error) => {
-  //       console.log(error)
-  //     },
-  //   })
-  // }
-
   function fileChange(file: Blob | null | undefined) {
     console.log("Uploading... Starts")
     fileUploaded = true
@@ -161,13 +136,13 @@ const SellNft: NextPage = () => {
           feeNumerator: 100,
         },
       },
-      onSuccess: () =>
-        handleMintSuccess(
-          aanftAddress,
-          marketplaceAddress,
-          price.toString(),
-          aanftAbi
-        ),
+      onSuccess: async (tx: any) => {
+        const txReceipt = await tx.wait(1)
+        const tokenId = txReceipt.events![0].args!.tokenId.toString()
+        console.log("minted token id is ", tokenId)
+        handleMintSuccess(price.toString(), tokenId)
+      },
+
       onError: (error) => {
         console.log("NFT not minted")
         console.log(
@@ -177,102 +152,60 @@ const SellNft: NextPage = () => {
       },
     })
   }
-
-  async function handleMintSuccess(
-    nftAddress: string,
-    marketplaceAddress: string,
-    price: string,
-    nftAbi: any
-  ) {
-    console.log("NFT minted Successfull!")
-    console.log("Approving...")
-
-    await runContractFunction({
-      params: {
-        abi: nftAbi,
-        contractAddress: nftAddress,
-        functionName: "getCountOfSupply",
-      },
-      onSuccess: (n) =>
-        handleGetCountSucess(
-          nftAddress,
-          marketplaceAddress,
-          price,
-          nftAbi,
-          // @ts-ignore
-          n!.toString()
-        ),
-      onError: (error) => {
-        console.log("count not got")
-        console.log(error)
-      },
-    })
-  }
-
-  async function handleGetCountSucess(
-    nftAddress: string,
-    marketplaceAddress: string,
-    price: string,
-    nftAbi: any,
-    supplyCount: string
-  ) {
-    console.log(`supply count is ${supplyCount}`)
-    let tokenId = (+supplyCount + 1).toString()
-    console.log(
-      `nft address is ${nftAddress}, marketplaceAddress is ${marketplaceAddress}, tokenId is ${tokenId}`
-    )
+  async function handleMintSuccess(price: string, tokenId: string) {
     // console.log(nftAbi)
 
-    await delay(15)
+    // await delay(15)
 
     await runContractFunction({
       params: {
-        abi: nftAbi,
-        contractAddress: nftAddress,
+        abi: aanftAbi,
+        contractAddress: aanftAddress,
         functionName: "approve",
         params: {
           to: marketplaceAddress,
           tokenId: tokenId,
         },
       },
-      onSuccess: () => handleApproveSuccess(nftAddress, tokenId, price),
+      onSuccess: async (tx: any) => {
+        await tx.wait(1)
+        console.log("Approval Successfull!")
+        handleApproveSuccess(tokenId, price)
+      },
       onError: (error) => {
         console.log("Approve not successful")
         console.log(
-          `nft address is ${nftAddress}, marketplaceAddress is ${marketplaceAddress}, tokenId is ${tokenId}, abi is ${nftAbi}`
+          `nft address is ${aanftAddress}, marketplaceAddress is ${marketplaceAddress}, tokenId is ${tokenId}, abi is ${aanftAbi}`
         )
         console.log(error)
       },
     })
   }
 
-  async function handleApproveSuccess(
-    nftAddress: string,
-    tokenId: string,
-    price: string
-  ) {
+  async function handleApproveSuccess(tokenId: string, price: string) {
     console.log("Approved!")
     console.log("Ok... Now listing the item...")
 
-    console.log("marketplace addres is: ", nftAddress)
-
-    await delay(15)
+    // await delay(15)
     await runContractFunction({
       params: {
         abi: marketplaceAbi,
         contractAddress: marketplaceAddress,
         functionName: "listItem",
         params: {
-          nftAddress: nftAddress,
+          nftAddress: aanftAddress,
           tokenId: tokenId,
           price: price,
         },
       },
-      onSuccess: () => handleListSuccess(tokenId),
+      onSuccess: async (tx: any) => {
+        await tx.wait(1)
+        handleListSuccess(tokenId)
+      },
       onError: (error) => {
         console.log("Item not Listed")
         console.log(
-          `nft address is ${nftAddress}, marketplaceAddress is ${marketplaceAddress}, tokenId is ${tokenId}, price is ${price}, abi is ${marketplaceAbi}`
+          `nft address is ${aanftAddress}, marketplaceAddress is ${marketplaceAddress}, tokenId is ${tokenId}, price is ${price}, abi is ${marketplaceAbi}`
         )
         console.log(error)
       },
@@ -349,4 +282,4 @@ const SellNft: NextPage = () => {
     </div>
   )
 }
-export default SellNft
+export default MintNft

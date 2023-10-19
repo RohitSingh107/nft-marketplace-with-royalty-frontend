@@ -85,7 +85,10 @@ export const UpdateListingModal = ({
       onCloseButtonPressed={onClose}
       onOk={() =>
         updateListing({
-          onSuccess: () => handleUpdateListingSuccess(),
+          onSuccess: async (tx: any) => {
+            await tx.wait(1)
+            handleUpdateListingSuccess()
+          },
         })
       }
       title="NFT Details"
@@ -135,7 +138,10 @@ export const UpdateListingModal = ({
             id="cancel-listing"
             onClick={() =>
               cancelListing({
-                onSuccess: () => handleCancelListingSuccess(),
+                onSuccess: async (tx: any) => {
+                  await tx.wait(1)
+                  handleCancelListingSuccess()
+                },
               })
             }
             text="Cancel Listing"

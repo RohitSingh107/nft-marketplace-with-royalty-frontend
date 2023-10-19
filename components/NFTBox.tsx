@@ -145,7 +145,10 @@ const NFTBox: NextPage<NFTBoxProps> = ({
     } else {
       console.log(marketplaceAddress)
       await buyItem({
-        onSuccess: () => handleBuyItemSuccess(),
+        onSuccess: async (tx: any) => {
+          await tx.wait(1)
+          handleBuyItemSuccess()
+        },
         onError: (error) => {
           console.log(error)
         },
